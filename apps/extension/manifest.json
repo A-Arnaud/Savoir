@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Savoir",
+  "version": "0.2.0",
+  "version_name": "0.2.0 beta 1",
+  "icons": {"16":"icons/icon16.png","32":"icons/icon32.png","48":"icons/icon48.png","128":"icons/icon128.png"},
+  "description": "Résumé et discussion avec votre compte ChatGPT, à côté de votre vidéo YouTube. Aucun modèle local.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoe3dZsp9BZ6A/N9kWgTyowTDNEeqmqaDO2s/CoMHuIyVKwRKl7doyeB4W2Lxp0G+GC/ZfnsPbw1KU31/u2yxd2664DUIE6psh5D1JYR9QPiKZUeFgTr38uTgi3EgF07XoxVuuFvRK7nr43rIL0w+VgiZ41nkg1A/GiEDe7QxZ88RSMiEtNPh9ed72VM9kpx+QY3xRBLvXZ6K0+WPBetClEQIsSATbiOP7ORVxJgoomT1xAp2WwrnFYGk8avVTHqSOH7pbv77hNORL62qn8vTRW1XlRqVT5k8BJAvRHUC08gI73GCalN2LJr24MyUW4qz/J7GjA6PCo1JR2HO3MV2yQIDAQAB",
+  "permissions": ["storage", "nativeMessaging"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": { "default_popup": "src/popup/index.html", "default_title": "Savoir" },
+  "options_page": "src/options/index.html",
+  "content_scripts": [{ "matches": ["https://www.youtube.com/*", "https://youtube.com/*", "https://youtu.be/*", "https://www.youtube-nocookie.com/embed/*"], "js": ["content.js"] }],
+  "web_accessible_resources": [{ "resources": ["src/panel/index.html", "assets/*"], "matches": ["https://www.youtube.com/*", "https://youtube.com/*", "https://www.youtube-nocookie.com/*"] }],
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'none'; connect-src 'none'" }
+}

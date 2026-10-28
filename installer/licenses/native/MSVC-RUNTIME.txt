@@ -1,0 +1,13 @@
+Microsoft Visual C++ Runtime
+
+VCRUNTIME140.dll and VCRUNTIME140_1.dll are Microsoft runtime components
+supplied with the Windows CPython runtime used to build this application.
+They retain Microsoft's copyright and licensing terms; they are not covered
+by Savoir's MIT licence or by the licences of unrelated dependencies.
+
+Vendor terms and redistribution information:
+https://visualstudio.microsoft.com/license-terms/vs2022-cruntime/
+https://learn.microsoft.com/en-us/visualstudio/releases/2022/redistribution
+
+This notice identifies the vendor terms; it does not grant additional rights
+or replace the requirements applying to Microsoft's redistributable code.

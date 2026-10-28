@@ -1,0 +1,22 @@
+name: Proposer une amélioration
+description: Un besoin concret, en gardant l’extension simple.
+title: "[Idée] "
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Quel problème rencontrez-vous ?
+      description: Expliquez le besoin avant de proposer une solution.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Que voudriez-vous pouvoir faire ?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives ou exemples
+      description: Facultatif. Aucun secret, contenu privé ou média dont vous n’avez pas les droits.

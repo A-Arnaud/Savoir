@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Installation et questions fréquentes
+    url: https://github.com/A-Arnaud/Savoir/blob/main/docs/faq.md
+    about: Vérifier les réponses connues avant d’ouvrir une issue.
+  - name: Signaler une vulnérabilité en privé
+    url: https://github.com/A-Arnaud/Savoir/security/advisories/new
+    about: Ne jamais publier de secret ni de détail exploitable dans une issue publique.

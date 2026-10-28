@@ -1,0 +1,14 @@
+{
+  "video": { "videoId": "abcdefghijk", "canonicalUrl": "https://www.youtube.com/watch?v=abcdefghijk", "title": null, "durationSeconds": null, "navigationRevision": 1 },
+  "kind": "insights",
+  "settings": {
+    "schemaVersion": 1, "interfaceLanguage": "fr", "outputLanguage": "EN", "autoSummary": false,
+    "flexible": { "focus": "insightful", "format": "list", "amount": "auto", "emoji": true, "highlight": true, "grouping": true },
+    "timestamped": { "emoji": true, "timestamps": true, "details": true },
+    "transcript": { "timestamps": true }, "comments": { "tldr": true }
+  },
+  "providerId": "ollama", "modelId": "test-model", "allowAudioFallback": false,
+  "importedSource": { "language": "en", "source": "import", "complete": true, "segments": [
+    { "id": "s1", "startSeconds": 50.97189189189189, "durationSeconds": 2, "text": "Original Cypher fixture: <script> stays text." }
+  ], "diagnostics": [] }
+}

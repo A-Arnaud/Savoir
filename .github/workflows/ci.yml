@@ -1,0 +1,80 @@
+name: Tests et build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  extension:
+    name: Extension et documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run build
+      - run: node tools/check-publication.mjs
+
+  windows:
+    name: Connecteur, installateur et navigateur Windows
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: latest
+          enable-cache: true
+      - run: npm ci
+      - run: uv sync --project services/native_host --python 3.12 --no-install-project --locked
+      - name: Tests du connecteur sans compte réel
+        run: .\services\native_host\.venv\Scripts\python.exe -m pytest -c services/native_host/pyproject.toml services/native_host/tests -q --tb=short
+      - run: npm run build
+      - name: Installer NSIS si nécessaire
+        shell: pwsh
+        run: |
+          if (-not (Get-Command makensis -ErrorAction SilentlyContinue)) {
+            choco install nsis -y --no-progress
+          }
+          if (Test-Path "${env:ProgramFiles(x86)}\NSIS\makensis.exe") {
+            "SAVOIR_MAKENSIS=${env:ProgramFiles(x86)}\NSIS\makensis.exe" >> $env:GITHUB_ENV
+          }
+      - name: Construire le paquet autonome
+        run: .\services\native_host\.venv\Scripts\python.exe scripts/package-native.py
+      - name: Installer dans le compte du runner
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath "$PWD\release\native-0.2.0\Savoir-Setup-0.2.0.exe" -ArgumentList '/S' -Wait -PassThru
+          if ($p.ExitCode -ne 0) { exit $p.ExitCode }
+      - name: Propriété des installations et désinstallation
+        run: .\services\native_host\.venv\Scripts\python.exe tools/check-windows-install.py
+      - run: node node_modules/@playwright/test/cli.js install chromium
+      - name: Vrai host installé et transport synthétique distinct
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: savoir-windows-verification
+          path: |
+            release/native-0.2.0/Savoir-Setup-0.2.0.exe
+            release/native-0.2.0/release-manifest.json
+            test-results/native/**/native-evidence.json
+            test-results/native/**/synthetic-transport-evidence.json
+          if-no-files-found: warn

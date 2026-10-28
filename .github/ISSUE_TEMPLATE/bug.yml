@@ -1,0 +1,40 @@
+name: Signaler un problème
+description: Un dysfonctionnement reproductible de Savoir.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "N’ajoutez aucun mot de passe, cookie, jeton, code de connexion ou transcription privée. Pour une vulnérabilité, utilisez le signalement privé indiqué dans SECURITY.md."
+  - type: input
+    id: version
+    attributes:
+      label: Version de Savoir
+      placeholder: 0.2.0 bêta 1
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Windows et navigateur
+      placeholder: Windows 10, Chrome 140 — sans identifiant personnel
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Comment reproduire
+      description: Étapes minimales, comportement observé et comportement attendu.
+    validations:
+      required: true
+  - type: textarea
+    id: errors
+    attributes:
+      label: Message d’erreur et capture facultative
+      description: Masquez comptes, chemins personnels et contenu privé avant de joindre des éléments.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Avant d’envoyer
+      options:
+        - label: J’ai vérifié qu’aucun secret ou contenu personnel n’est inclus.
+          required: true

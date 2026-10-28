@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES2023", "module": "NodeNext", "moduleResolution": "NodeNext",
+    "strict": true, "allowJs": true, "checkJs": false, "noEmit": true,
+    "types": ["node", "chrome"], "skipLibCheck": true, "jsx": "react-jsx",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"]
+  },
+  "include": ["tools/**/*.mjs", "tests/**/*.ts", "packages/**/*.ts", "apps/**/*.ts", "apps/**/*.tsx", "vitest.config.ts"]
+}
