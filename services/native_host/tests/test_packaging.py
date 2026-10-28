@@ -43,11 +43,11 @@ def test_native_runtime_notices_are_copied_and_bound_to_distributed_binaries(tmp
 
 def test_os_api_set_forwarders_are_excluded_without_removing_vendor_libraries(tmp_path):
  p=packaging();folder=tmp_path/'connector';folder.mkdir()
- names=('api-ms-win-core-console-l1-1-0.dll','ext-ms-win-test-fixture.dll','libffi-8.dll','unknown-vendor.dll')
+ names=('api-ms-win-core-console-l1-1-0.dll','ext-ms-win-test-fixture.dll','ucrtbase.dll','libffi-8.dll','unknown-vendor.dll')
  for name in names:(folder/name).write_bytes(b'explicit-packaging-test-fixture')
  removed=p.prune_windows_api_sets(folder)
- assert set(removed)==set(names[:2])
- assert not (folder/names[0]).exists() and not (folder/names[1]).exists()
+ assert set(removed)==set(names[:3])
+ assert all(not (folder/name).exists() for name in names[:3])
  assert (folder/'libffi-8.dll').exists() and (folder/'unknown-vendor.dll').exists()
 
 
