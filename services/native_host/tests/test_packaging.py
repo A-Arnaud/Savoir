@@ -41,6 +41,16 @@ def test_native_runtime_notices_are_copied_and_bound_to_distributed_binaries(tmp
  assert all(r['notice'] and len(r['sha256'])==64 for r in index['binaries'])
 
 
+def test_os_api_set_forwarders_are_excluded_without_removing_vendor_libraries(tmp_path):
+ p=packaging();folder=tmp_path/'connector';folder.mkdir()
+ names=('api-ms-win-core-console-l1-1-0.dll','ext-ms-win-test-fixture.dll','libffi-8.dll','unknown-vendor.dll')
+ for name in names:(folder/name).write_bytes(b'explicit-packaging-test-fixture')
+ removed=p.prune_windows_api_sets(folder)
+ assert set(removed)==set(names[:2])
+ assert not (folder/names[0]).exists() and not (folder/names[1]).exists()
+ assert (folder/'libffi-8.dll').exists() and (folder/'unknown-vendor.dll').exists()
+
+
 def test_packaging_refuses_arbitrary_extension_keys():
  p=packaging()
  with pytest.raises(ValueError):p.host_manifest({'key':'invalid'})

@@ -14,6 +14,8 @@ Le build copie `PYTHON-LICENSE.txt`, les notices de distributions Python et leur
 
 Les bibliothèques natives du runtime ont aussi leurs notices : `licenses/native` contient notamment libffi, OpenSSL 3, SQLite, zlib, bzip2, liblzma, Expat et mpdecimal. Les textes sont conservés verbatim avec leur provenance/hash dans `sources.json` ; un index associe les DLL réellement distribuées à leur hash et notice. Les références Microsoft Visual C++ Runtime restent distinctes et ne sont pas assimilées à une licence MIT. Lors d’un changement de runtime, les notices et tout nouveau nom de DLL doivent être réexaminés.
 
+Les forwarders `api-ms-win-*` / `ext-ms-win-*` collectés accidentellement sur un poste de build sont exclus : sur les versions Windows 10+ ciblées, ces contrats sont résolus par le système. Voir [Windows API sets](https://learn.microsoft.com/en-us/windows/win32/apiindex/windows-apisets). Cela ne retire pas les véritables DLL tierces du runtime.
+
 ## Outils de développement
 
 Vite, esbuild, TypeScript, Vitest, Playwright, pytest, uv et NSIS sont des outils de build ou de test. Chromium est téléchargé séparément pour les tests et n’est pas livré dans l’installateur. Le guide développeur n’accorde aucun droit supplémentaire sur ces projets.

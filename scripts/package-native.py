@@ -47,6 +47,17 @@ def npm_licenses(root,destination):
     return index
 
 
+def prune_windows_api_sets(connector):
+    # Windows 10+ resolves API-set contracts through its OS loader/schema.
+    # Do not redistribute accidental SDK/OS forwarder copies collected by a CI
+    # machine; this is not permission to remove real third-party vendor DLLs.
+    removed=[]
+    for library in connector.rglob('*.dll'):
+        if library.name.lower().startswith(('api-ms-win-','ext-ms-win-')):
+            removed.append(library.relative_to(connector).as_posix());library.unlink()
+    return sorted(removed)
+
+
 def native_licenses(root,destination,connector):
     source=root/'installer/licenses/native'
     provenance=json.loads((source/'sources.json').read_text(encoding='utf-8'))
@@ -111,6 +122,7 @@ def main():
         target=stage/name
         if target.exists():shutil.rmtree(target)
         shutil.copytree(source,target)
+    excluded_api_sets=prune_windows_api_sets(stage/'connector')
     (stage/'com.cypher.youtube.json').write_text(json.dumps(host_manifest(manifest),indent=2),encoding='utf-8')
     shutil.copy2(ROOT/'LICENSE',stage/'LICENSE.txt')
     licenses(stage/'licenses')
@@ -122,7 +134,7 @@ def main():
     installer=release/f'Savoir-Setup-{VERSION}.exe'
     run([nsis,'/INPUTCHARSET','UTF8',f'/DPAYLOAD={stage}',f'/DOUTPUT={installer}',ROOT/'installer/cypher.nsi'])
     result={'version':VERSION,'extensionId':public_key_id,'installer':str(installer.resolve()),'sha256':hashlib.sha256(installer.read_bytes()).hexdigest(),
-            'bytes':installer.stat().st_size,'signed':False,'storePublished':False}
+            'bytes':installer.stat().st_size,'signed':False,'storePublished':False,'osApiSetForwardersExcluded':excluded_api_sets}
     (release/'release-manifest.json').write_text(json.dumps(result,indent=2),encoding='utf-8')
     print(json.dumps(result,indent=2))
 
